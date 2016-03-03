@@ -472,12 +472,13 @@ Formatter = (function(superClass) {
 
   Formatter.prototype._init = function() {
     this.editor = this._module;
-    this._allowedTags = $.merge(['br', 'span', 'a', 'img', 'b', 'strong', 'i', 'strike', 'u', 'font', 'p', 'ul', 'ol', 'li', 'blockquote', 'pre', 'code', 'h1', 'h2', 'h3', 'h4', 'hr'], this.opts.allowedTags);
+    this._allowedTags = $.merge(['div', 'br', 'span', 'a', 'img', 'b', 'strong', 'i', 'strike', 'u', 'font', 'p', 'ul', 'ol', 'li', 'blockquote', 'pre', 'code', 'h1', 'h2', 'h3', 'h4', 'hr'], this.opts.allowedTags);
     this._allowedAttributes = $.extend({
       img: ['src', 'alt', 'width', 'height', 'data-non-image'],
       a: ['href', 'target'],
       font: ['color'],
-      code: ['class']
+      code: ['class'],
+      div: ['class']
     }, this.opts.allowedAttributes);
     this._allowedStyles = $.extend({
       span: ['color', 'font-size'],
@@ -736,7 +737,7 @@ Formatter = (function(superClass) {
           if (children && children.length > 0) {
             result += _this.clearHtml(children);
           }
-          if (lineBreak && i < contents.length - 1 && $node.is('br, p, div, li,tr, pre, address, artticle, aside, dl, figcaption, footer, h1, h2,h3, h4, header')) {
+          if (lineBreak && i < contents.length - 1 && $node.is('div','br, p, div, li,tr, pre, address, artticle, aside, dl, figcaption, footer, h1, h2,h3, h4, header')) {
             return result += '\n';
           }
         }
@@ -2098,7 +2099,7 @@ Indentation = (function(superClass) {
         $('<' + tagName + '/>').append($blockEl).appendTo($parentLi);
       }
       this.editor.selection.restore();
-    } else if ($blockEl.is('p, h1, h2, h3, h4')) {
+    } else if ($blockEl.is('div', 'p, h1, h2, h3, h4')) {
       marginLeft = parseInt($blockEl.css('margin-left')) || 0;
       marginLeft = (Math.round(marginLeft / this.opts.indentWidth) + 1) * this.opts.indentWidth;
       $blockEl.css('margin-left', marginLeft);
@@ -2170,7 +2171,7 @@ Indentation = (function(superClass) {
         }
       }
       this.editor.selection.restore();
-    } else if ($blockEl.is('p, h1, h2, h3, h4')) {
+    } else if ($blockEl.is('div, p, h1, h2, h3, h4')) {
       marginLeft = parseInt($blockEl.css('margin-left')) || 0;
       marginLeft = Math.max(Math.round(marginLeft / this.opts.indentWidth) - 1, 0) * this.opts.indentWidth;
       $blockEl.css('margin-left', marginLeft === 0 ? '' : marginLeft);
@@ -2684,8 +2685,8 @@ Simditor.i18n = {
     'linkText': '链接文字',
     'linkUrl': '链接地址',
     'linkTarget': '打开方式',
-    'openLinkInCurrentWindow': '在新窗口中打开',
-    'openLinkInNewWindow': '在当前窗口中打开',
+    'openLinkInCurrentWindow': '在当前窗口中打开',
+    'openLinkInNewWindow': '在新窗口中打开',
     'removeLink': '移除链接',
     'ol': '有序列表',
     'ul': '无序列表',
@@ -5508,7 +5509,7 @@ AlignmentButton = (function(superClass) {
 
   AlignmentButton.prototype.icon = 'align-left';
 
-  AlignmentButton.prototype.htmlTag = 'p, h1, h2, h3, h4, td, th';
+  AlignmentButton.prototype.htmlTag = 'div, p, h1, h2, h3, h4, td, th';
 
   AlignmentButton.prototype._init = function() {
     this.menu = [
